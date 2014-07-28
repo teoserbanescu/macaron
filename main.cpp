@@ -5,14 +5,28 @@ void display(void)
 {
 	// Clear the color buffer, restore the background
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// Load the identity matrix, clear all the previous transformations
+	// Load the glLoadIdentitytity matrix, clear all the previous transformations
 	glLoadIdentity();
 	// Set up the camera
 	gluLookAt(5, 5, 5, 0, 0, 0, 0, 1, 0);
 	// Set the drawing color to orange/yellow
 	glColor3f(1, 1, 0);
 	// Draw a teapot of size 3
-	glutWireTeapot(3);
+	glPushMatrix();
+		glTranslatef(0, 3, 0);
+		glutWireTeapot(1);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(3, 0, 0);
+		glutWireTeapot(1);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(0, 0, 3);
+		glutWireTeapot(1);
+	glPopMatrix();
+	
 	// Swap buffers in GPU
 	glutSwapBuffers();
 }
