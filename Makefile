@@ -1,6 +1,6 @@
 build:
-	gcc main.cpp -lglut -lGLU -lGL -o tea.out -Wall
+	gcc altul.c -lglut -lGLU -lGL -o cub.out -Wall
 run:
-	./tea.out
+	./cub.out
 clear:
-	rm tea.out
+	rm cub.out
