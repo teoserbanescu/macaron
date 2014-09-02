@@ -1,5 +1,5 @@
 build:
-	gcc altul.c -lglut -lGLU -lGL -o cub.out -Wall
+	gcc altul.c vector.c -lglut -lGLU -lGL -lm -o cub.out -Wall
 run:
 	./cub.out
 clear:
