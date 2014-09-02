@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <GL/glut.h>
+#include "vector.h"
 
 GLfloat light_pos[] = {5, 20, 5, 1};
 GLfloat light_col[] = {1, 1, 1, 1};
+GLfloat angle, step = 0.1;
+
+Vector eye, target;
 
 void Reshape(int width, int height)
 {
@@ -19,7 +23,7 @@ void Display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glLoadIdentity();
-	gluLookAt(2, 2.5, 2, 10, 2.5, 5.5, 0, 1, 0);//eyex,eyey,eyez,targetx,targety,targetz,upx,upy,upz(inclin)
+	gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, 0, 1, 0);//eyex,eyey,eyez,targetx,targety,targetz,upx,upy,upz(inclin)
 //teapot	
 	//glTranslatef(4, 0, 0);	//inainte de desenat
 	//glRotatef(alpha,vx,vy,vz);
@@ -96,10 +100,13 @@ void Display(void)
 	glEnd();
 
 	glPushMatrix();
+		//cube
 		glColor3f(0, 0, 1);
 		glTranslatef(5, 1, 5);
 		glutSolidCube(2);
+		//teapot
 		glColor3f(1, 0, 0);
+		glRotatef(angle, 0, 1, 0);
 		glTranslatef(0, 1.75, 0);
 		glutSolidTeapot(1);
 	glPopMatrix();
@@ -133,6 +140,48 @@ void initialize(void)
 	glEnable(GL_LIGHTING);
 }
 
+void timer(int value) //rotirea ceainicului
+{
+	angle++;
+	if (angle >= 360) angle = 0;
+	
+	glutPostRedisplay();
+	
+	glutTimerFunc(2, timer, value + 1);
+	
+}
+
+void keyboard(unsigned char c, int x, int y) //tasta care se citeste, pozitia mouse-ului
+{
+	switch (c)
+	{
+		case 119:
+		{
+			Vector dir;
+			dir = substractVectors(target, eye);
+			Vector dir1 = normalizeVector(dir);
+			Vector Step = multiplyVector(dir1, step);
+			eye = addVectors(eye, Step);
+			target = addVectors(target, Step);
+			break;
+		}
+		case 's':
+		{
+			Vector dir;
+			dir = substractVectors(target, eye);
+			Vector dir1 = normalizeVector(dir);
+			Vector Step = multiplyVector(dir1, -step);
+			eye = addVectors(eye, Step);
+			target = addVectors(target, Step);
+			break;
+		}
+		case 27:
+			exit(0);
+			break;
+	}
+}
+
+
 int main(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
@@ -144,7 +193,14 @@ int main(int argc, char *argv[])
 	glutDisplayFunc(Display);
 	
 	initialize();
+	
+	eye.x = 2; eye.y = 2.5; eye.z = 2;
+	target.x = 5; target.y = 2.5; target.z = 5;
 
+	glutTimerFunc(2, timer, 0);
+	
+	glutKeyboardFunc(keyboard);
+	
 	glutMainLoop();
 	
 	return 0;
