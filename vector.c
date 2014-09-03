@@ -38,3 +38,12 @@ Vector multiplyVector(Vector a, GLfloat scalar)
 	return a;
 
 }
+
+Vector createVector(GLdouble x, GLdouble y, GLdouble z) 
+{
+	Vector v;
+	v.x = x;
+	v.y = y;
+	v.z = z;
+	return v;
+}
